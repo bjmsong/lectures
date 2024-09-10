@@ -1,7 +1,6 @@
 #include <c10/cuda/CUDAException.h>
 #include <c10/cuda/CUDAStream.h>
 
-
 __global__
 void rgb_to_grayscale_kernel(unsigned char* output, unsigned char* input, int width, int height) {
     const int channels = 3;
@@ -9,7 +8,7 @@ void rgb_to_grayscale_kernel(unsigned char* output, unsigned char* input, int wi
     int col = blockIdx.x * blockDim.x + threadIdx.x;
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     if (col < width && row < height) {
-        int outputOffset = row * width + col;
+        int outputOffset = row * width + col;   // row-major
         int inputOffset = (row * width + col) * channels;
 
         unsigned char r = input[inputOffset + 0];   // red

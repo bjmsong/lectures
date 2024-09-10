@@ -1,0 +1,15 @@
+{
+    "files.associations":{"*.cu":"cpp"},
+    "clangd.fallbackFlags": [
+        "-std=c++11",
+        "-I${workspaceFolder}", // root dir
+        "-I/root/cutlass/include",
+        "-I/usr/local/cuda/targets/x86_64-linux/include",
+        "-I/root/miniconda3/envs/llm/include",
+        "-I/root/miniconda3/envs/llm/lib/python3.9/site-packages/torch/include",
+        // "-I/root/miniconda3/envs/llm/lib/python3.9/site-packages/torch/include/torch/csrc/api/include/torch",
+        "-I/usr/include/c++/11",
+        "-I/usr/include",
+        "--gcc-toolchain=/usr/bin/gcc"
+    ]
+  }

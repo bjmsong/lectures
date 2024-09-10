@@ -4,11 +4,15 @@
 
 __global__
 void mean_filter_kernel(unsigned char* output, unsigned char* input, int width, int height, int radius) {
+    /*
+    @params
+        radius: get mean from [-radius, radius] rows & [-radius, radius] cols
+    */
     int col = blockIdx.x * blockDim.x + threadIdx.x;
     int row = blockIdx.y * blockDim.y + threadIdx.y;
     int channel = threadIdx.z;
 
-    int baseOffset = channel * height * width;
+    int baseOffset = channel * height * width;  // offset of one channel
     if (col < width && row < height) {
 
         int pixVal = 0;
@@ -18,6 +22,7 @@ void mean_filter_kernel(unsigned char* output, unsigned char* input, int width, 
             for (int blurCol=-radius; blurCol <= radius; blurCol += 1) {
                 int curRow = row + blurRow;
                 int curCol = col + blurCol;
+                // Boundry check
                 if (curRow >= 0 && curRow < height && curCol >=0 && curCol < width) {
                     pixVal += input[baseOffset + curRow * width + curCol];
                     pixels += 1;
