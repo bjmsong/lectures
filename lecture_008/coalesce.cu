@@ -25,13 +25,14 @@ int main() {
     const int n = 1 << 24; // Increase n to have a larger workload
     float *in, *out;
 
+    // allocate Unified Memory which can be accessed by both CPU and GPU
     cudaMallocManaged(&in, n * sizeof(float));
     cudaMallocManaged(&out, n * sizeof(float));
 
     initializeArray(in, n);
 
-    int blockSize = 128; // Define block size
-    // int blockSize = 1024; // change this when talking about occupancy
+    int blockSize = 128;
+    // int blockSize = 1024; // change to this when talking about occupancy
     int numBlocks = (n + blockSize - 1) / blockSize; // Ensure there are enough blocks to cover all elements
 
     // Launch non-coalesced kernel

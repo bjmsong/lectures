@@ -28,7 +28,8 @@ int main() {
 
     // Optimize grid dimensions based on device properties
     int minGridSize = 40;
-    // cudaOccupancyMaxPotentialBlockSize(&minGridSize, &blockSize, copyDataCoalesced, 0, 0);
+    // use suggested blocksize from this function as starting point
+    cudaOccupancyMaxPotentialBlockSize(&minGridSize, &blockSize, copyDataCoalesced, 0, 0);
 
     // Print suggested block size and minimum grid size
     std::cout << "Recommended block size: " << blockSize

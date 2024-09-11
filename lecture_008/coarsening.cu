@@ -53,30 +53,32 @@ int main()
     cudaMemcpy(d_a, a, size, cudaMemcpyHostToDevice);
     cudaMemcpy(d_b, b, size, cudaMemcpyHostToDevice);
 
-    // Start timer for VecAdd kernel
-    cudaEventRecord(start);
-    VecAdd<<<(N + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK, THREADS_PER_BLOCK>>>(d_a, d_b, d_c);
-    cudaEventRecord(stop);
+    for(int i=0; i<3; i++){
+        // Start timer for VecAdd kernel
+        cudaEventRecord(start);
+        VecAdd<<<(N + THREADS_PER_BLOCK - 1) / THREADS_PER_BLOCK, THREADS_PER_BLOCK>>>(d_a, d_b, d_c);
+        cudaEventRecord(stop);
 
-    // Wait for VecAdd kernel to finish
-    cudaEventSynchronize(stop);
+        // Wait for VecAdd kernel to finish
+        cudaEventSynchronize(stop);
 
-    float milliseconds = 0;
-    cudaEventElapsedTime(&milliseconds, start, stop);
-    printf("VecAdd execution time: %f ms\n", milliseconds);
+        float milliseconds = 0;
+        cudaEventElapsedTime(&milliseconds, start, stop);
+        printf("VecAdd execution time: %f ms\n", milliseconds);
 
-    // Start timer for VecAddCoarsened kernel
-    cudaEventRecord(startCoarsened);
-    VecAddCoarsened<<<(N + 2*THREADS_PER_BLOCK - 1) / (2*THREADS_PER_BLOCK), THREADS_PER_BLOCK>>>(d_a, d_b, d_c);
-    cudaEventRecord(stopCoarsened);
+        // Start timer for VecAddCoarsened kernel
+        cudaEventRecord(startCoarsened);
+        VecAddCoarsened<<<(N + 2*THREADS_PER_BLOCK - 1) / (2*THREADS_PER_BLOCK), THREADS_PER_BLOCK>>>(d_a, d_b, d_c);
+        cudaEventRecord(stopCoarsened);
 
-    // Wait for VecAddCoarsened kernel to finish
-    cudaEventSynchronize(stopCoarsened);
+        // Wait for VecAddCoarsened kernel to finish
+        cudaEventSynchronize(stopCoarsened);
 
-    float millisecondsCoarsened = 0;
-    cudaEventElapsedTime(&millisecondsCoarsened, startCoarsened, stopCoarsened);
-    printf("VecAddCoarsened execution time: %f ms\n", millisecondsCoarsened);
-
+        float millisecondsCoarsened = 0;
+        cudaEventElapsedTime(&millisecondsCoarsened, startCoarsened, stopCoarsened);
+        printf("VecAddCoarsened execution time: %f ms\n", millisecondsCoarsened);
+    }
+    
     // Copy result back to host
     cudaMemcpy(c, d_c, size, cudaMemcpyDeviceToHost);
 
